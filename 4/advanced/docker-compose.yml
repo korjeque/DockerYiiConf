@@ -1,0 +1,31 @@
+version: '3'
+services:
+  php:
+    container_name: "php"
+    build: "./docker/php"
+    volumes:
+      - "${PROJECT_PATH}:/var/www"
+    working_dir: "/var/www"
+
+  nginx:
+    container_name: "nginx"
+    build: "./docker/nginx"
+    ports:
+      - "80:80"
+    volumes:
+      - "${PROJECT_PATH}:/var/www"
+
+  db:
+    container_name: "db"
+    build: "./docker/mysql"
+    volumes:
+      - "mysql_data:/var/lib/mysql"
+    ports:
+      - "5432:5432"
+    environment:
+      MYSQL_DB: "${MYSQL_DB}"
+      MYSQL_USER: "${MYSQL_USER}"
+      MYSQL_PASS: "${MYSQL_PASS}"
+
+volumes:
+  mysql_data:

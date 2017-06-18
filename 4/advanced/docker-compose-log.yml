@@ -1,0 +1,68 @@
+version: '3'
+services:
+  php:
+    container_name: "php"
+    build: "./docker/php"
+    volumes:
+      - "${PROJECT_PATH}:/var/www"
+    working_dir: "/var/www"
+
+  nginx:
+    container_name: "nginx"
+    build: "./docker/nginx"
+    ports:
+      - "80:80"
+    volumes:
+      - "${PROJECT_PATH}:/var/www"
+
+  db:
+    container_name: "db"
+    build: "./docker/mysql"
+    volumes:
+      - "mysql_data:/var/lib/mysql"
+    ports:
+      - "5432:5432"
+    environment:
+      MYSQL_DB: "${MYSQL_DB}"
+      MYSQL_USER: "${MYSQL_USER}"
+      MYSQL_PASS: "${MYSQL_PASS}"
+
+  logstash:
+    build: "./docker/logstash"
+    depends_on:
+      - elasticsearch
+    environment:
+      # otherwise logstash will keep sending its own logs to itself over and over... not fun
+      LOGSPOUT: "ignore"
+
+  elasticsearch:
+    build: ./docker/elasticsearch/
+    volumes:
+      - ./docker/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+
+  kibana:
+    build: ./docker/kibana/
+    volumes:
+      - ./docker/kibana/config/:/usr/share/kibana/config
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+
+  logspout:
+    image: "gliderlabs/logspout"
+    command: 'syslog://logstash:5000'
+    environment:
+      DEBUG: "true"
+    volumes:
+      - '/var/run/docker.sock:/tmp/docker.sock'
+    depends_on:
+      - logstash
+
+volumes:
+  mysql_data:

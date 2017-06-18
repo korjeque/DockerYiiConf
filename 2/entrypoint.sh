@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 PG_PASSWORD=${PG_PASSWORD:-$(pwgen -c -n -1 16)}
 
 if [ ! -d "$PG_DATA" ]; then
