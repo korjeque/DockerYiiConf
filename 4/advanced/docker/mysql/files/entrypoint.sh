@@ -18,7 +18,7 @@ function create_database() {
 
 function create_user() {
     echo -e "\e[1;48;3;33mCreating MariaDB user '$MYSQL_USER' with '$MYSQL_PASS' password.\e[0m"
-    echo "CREATE USER '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASS';" >> "$tempSqlFile"
+    echo "CREATE USER IF NOT EXISTS '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASS';" >> "$tempSqlFile"
     echo "GRANT ALL PRIVILEGES ON $MYSQL_DB.* TO '$MYSQL_USER'@'%' WITH GRANT OPTION;" >> "$tempSqlFile"
     echo 'FLUSH PRIVILEGES ;' >> "$tempSqlFile"
 }

@@ -34,9 +34,12 @@ services:
     environment:
       # otherwise logstash will keep sending its own logs to itself over and over... not fun
       LOGSPOUT: "ignore"
+      WAIT_FOR: "elasticsearch:9200"
+    #logging:
+    #  driver: none
 
   elasticsearch:
-    build: ./docker/elasticsearch/
+    build: "./docker/elasticsearch/"
     volumes:
       - ./docker/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
     ports:
@@ -46,7 +49,7 @@ services:
       ES_JAVA_OPTS: "-Xmx256m -Xms256m"
 
   kibana:
-    build: ./docker/kibana/
+    build: "./docker/kibana/"
     volumes:
       - ./docker/kibana/config/:/usr/share/kibana/config
     ports:

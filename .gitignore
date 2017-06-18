@@ -1,6 +1,7 @@
 .idea
 .bowerrc
 .gitignore
+.DS_Store
 LICENSE.md
 README.md
 assets/

@@ -1,9 +1,5 @@
 FROM logstash
 
-MAINTAINER Mikhail Bakulin <bakulin_m@tass.ru>
-
-ENV TZ 'Europe/Moscow'
-
 ADD files /
 RUN chmod 755 /logstash.conf
 

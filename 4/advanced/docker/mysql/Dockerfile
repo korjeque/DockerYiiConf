@@ -1,7 +1,5 @@
 FROM ubuntu:16.04
 
-MAINTAINER Mikhail Bakulin <bakulin_m@tass.ru>
-
 ARG DEBIAN_FRONTEND=noninteractive
 
 COPY files /
